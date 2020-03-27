@@ -16,7 +16,7 @@ var pas = 1; // précision
 var courbes = {
   index: 0,
   data: [
-    { polygonPoints: [] }
+    { polygonPoints: [], deCasteljauPoints: [] }
   ]
 };
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
@@ -59,7 +59,7 @@ function create() {
       if (event.key == "ArrowRight") {
         courbes.index = Math.min(courbes.index + 1, courbes.data.length);
         if (courbes.data[courbes.index] == undefined) {
-          courbes.data[courbes.index] = { polygonPoints: [] }
+          courbes.data[courbes.index] = { polygonPoints: [], deCasteljauPoints: [] }
         }
       }
     }, this);
@@ -82,18 +82,21 @@ function update() {
     }
     
     // On update deCasteljauPoints de la courbe courante
-    const deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
-    displayDeCasteljau(deCasteljauPoints); 
+    courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
+    displayDeCasteljau(courbes.data[currentIndex].deCasteljauPoints); 
 }
 
+function displayLine(points) {
+    for (var i = 0; i < points.length - 1; i++) {
+        // Permet de dessiner les lignes entre les points (du stade 0)
+        graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
+    }  
+}
 
 function displayDeCasteljau(points) {
-  // Dessine les traits verts
-  graphics.lineStyle(2, 0x000000ff);
-    for (var i = 0; i < points.length - 1; i++) {
-      // Permet de dessiner les lignes entre les points (du stade 0)
-      graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
-    }
+    // Dessine les traits verts
+    graphics.lineStyle(2, 0x000000ff);
+    displayLine(points)
 }
 
 // Algorithme de De Casteljau
@@ -111,14 +114,12 @@ function deCasteljau(points) {
                   points[i][j].y = (1 - t) * points[i][j - 1].y + points[i + 1][j - 1].y * t
               }
           }
-
-          deCasteljauPoints.push(points[0][n]);
-
+          
           // Affiche les points blancs
           graphics.fillPointShape(points[0][n], 15);
+          deCasteljauPoints.push(points[0][n]);
       }
     }
   
     return deCasteljauPoints
 }
-
