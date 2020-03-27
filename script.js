@@ -11,10 +11,10 @@ var config = {
 
 var game = new Phaser.Game(config);
 
-var lines;
 var points;
 var graphics;
 
+// Methode executé une seul fois au début
 function create() {
     graphics = this.add.graphics();
 
@@ -23,13 +23,14 @@ function create() {
         points[i] = []
     }
 
+    // Points initiaux aux stade 0
     points[0][0] = new Phaser.Geom.Point(150, 450);
     points[1][0] = new Phaser.Geom.Point(260, 200);
     points[2][0] = new Phaser.Geom.Point(460, 200);
     points[3][0] = new Phaser.Geom.Point(600, 400);
   
+    // A chaque fois que l'on clique on ajoute un point
     this.input.on('pointerdown', function (pointer) {
-      console.log('here')
       points.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
     }, this);
     
@@ -37,6 +38,7 @@ function create() {
     deCasteljau(points);
 }
 
+// Methode executé a chaque frame
 function update() {
     graphics.clear();
     graphics.fillStyle(0xffffff);
@@ -44,21 +46,22 @@ function update() {
     for (var i = 0; i < points.length - 1; i++) {
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i][0].x, points[i][0].y, points[i + 1][0].x, points[i + 1][0].y));
     }
-    
+  
 }
 
+// De Casteljau's algorithme
 function deCasteljau(points) {
     var n = 3;
     for (var t = 0; t < 1 ; t += 1/n) {
-
         for(var j = 1; j < n; j++) {
             for (var i = 0; i < n - j; i++) {
-                points[i][j] = (1 - t) * points[i][j - 1] + points[i + 1][j - 1]
+                points[i][j] = new Phaser.Geom.Point(0, 0);
+                points[i][j].x = (1 - t) * points[i][j - 1].x + points[i + 1][j - 1].y
+                points[i][j].y = (1 - t) * points[i][j - 1].x + points[i + 1][j - 1].y
             }
         }
-
-        graphics.fillPointShape(new Phaser.Geom.Point(points[0][n], points[0][n]), 15);
     }
-  
+    
+    graphics.fillPointShape(points[0][n], 15);
     console.log(points)
 }
