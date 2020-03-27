@@ -37,17 +37,21 @@ function create() {
 
 // Methode executé a chaque frame
 function update() {
+    // Clear le canvas
     graphics.clear();
     graphics.fillStyle(0xffffff);
+  
+    // Dessine les traits verts
     graphics.lineStyle(2, 0x00ff00);
     for (var i = 0; i < points.length - 1; i++) {
+        // Permet de dessiner les lignes entre les points
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i][0].x, points[i][0].y, points[i + 1][0].x, points[i + 1][0].y));
     }
     
     deCasteljau(points);
 }
 
-// De Casteljau algorithme
+// Algorithme de De Casteljau
 function deCasteljau(points) {
     var n = 3;
     for (var t = 0; t <= 1 ; t += 1/n) {
@@ -58,7 +62,8 @@ function deCasteljau(points) {
                 points[i][j].y = (1 - t) * points[i][j - 1].y + points[i + 1][j - 1].y * t
             }
         }
-      
+        
+        // Affiche les points blancs
         graphics.fillPointShape(points[0][n], 15);
     }
 }
