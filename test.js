@@ -2,8 +2,17 @@
 function deBoor(points) {
   var p = 3
   for(var j = 0 ; j< p+1; j++){
-        var d = points[j+point.x - p]
+        var d = points[j+points.x - p]
         }
+
+  for(var r =1 ; r< p+1 ; r++){
+    for(var j = p  ; j!=r-1 ; -1){
+      alpha = (x-)
+    }
+  }
+  
+  
+  
 }
 
 

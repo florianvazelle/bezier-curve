@@ -16,7 +16,7 @@ var pas = 1; // précision
 var courbes = {
   index: 0,
   data: [
-    { polygonPoints: [], deCasteljauPoints: [] }
+    { polygonPoints: [] }
   ]
 };
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
@@ -54,14 +54,13 @@ function create() {
       
       if (event.key == "ArrowLeft") {
         courbes.index = Math.max(courbes.index - 1, 0);
-        console.log(courbes.index)
-        if (courbes.data[courbes.index].polygonPoints == undefined) {
-          courbes.data[courbes.index] = { polygonPoints: [], deCasteljauPoints: [] }
-        }
       }
+      
       if (event.key == "ArrowRight") {
-        console.log(courbes.index)
         courbes.index = Math.min(courbes.index + 1, courbes.data.length);
+        if (courbes.data[courbes.index] == undefined) {
+          courbes.data[courbes.index] = { polygonPoints: [] }
+        }
       }
     }, this);
 }
@@ -83,8 +82,8 @@ function update() {
     }
     
     // On update deCasteljauPoints de la courbe courante
-    courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
-    displayDeCasteljau(courbes.data[currentIndex].deCasteljauPoints); 
+    const deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
+    displayDeCasteljau(deCasteljauPoints); 
 }
 
 
@@ -100,21 +99,24 @@ function displayDeCasteljau(points) {
 // Algorithme de De Casteljau
 function deCasteljau(points) {
     var deCasteljauPoints = []
+    var n = points.length - 1;
   
-    var n = points.length - 1; // Le pas
-    for (var t = 0; t <= 1 ; t += 1/(n * pas)) {
-        for(var j = 1; j <= n; j++) {
-            for (var i = 0; i <= n - j; i++) {
-                points[i][j] = new Phaser.Geom.Point(0, 0);
-                points[i][j].x = (1 - t) * points[i][j - 1].x + points[i + 1][j - 1].x * t
-                points[i][j].y = (1 - t) * points[i][j - 1].y + points[i + 1][j - 1].y * t
-            }
-        }
-        
-        deCasteljauPoints.push(points[0][n]);
-      
-        // Affiche les points blancs
-        graphics.fillPointShape(points[0][n], 15);
+    // Pour verifier qu'il y a au moins un point
+    if (n > -1) { 
+      for (var t = 0; t <= 1 ; t += 1/(n * pas)) {
+          for(var j = 1; j <= n; j++) {
+              for (var i = 0; i <= n - j; i++) {
+                  points[i][j] = new Phaser.Geom.Point(0, 0);
+                  points[i][j].x = (1 - t) * points[i][j - 1].x + points[i + 1][j - 1].x * t
+                  points[i][j].y = (1 - t) * points[i][j - 1].y + points[i + 1][j - 1].y * t
+              }
+          }
+
+          deCasteljauPoints.push(points[0][n]);
+
+          // Affiche les points blancs
+          graphics.fillPointShape(points[0][n], 15);
+      }
     }
   
     return deCasteljauPoints
