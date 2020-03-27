@@ -13,32 +13,40 @@ var config = {
 var game = new Phaser.Game(config);
 
 var pas = 1; // précision
+var courbes = {
+  index: 0,
+  data: [
+    { polygonPoints: [], deCasteljauPoints: [] }
+  ]
+};
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
 var graphics;
 
 // Methode executé une seul fois au début
 function create() {
     graphics = this.add.graphics();
+  
+    var currentCourbe = courbes.data[courbes.index]
 
-    points = []
     for (var i = 0; i < 4; i++) {
-        points[i] = []
+        currentCourbe[i] = []
     }
 
     // Points initiaux aux stade 0 => polygone de controle
-    points[0][0] = new Phaser.Geom.Point(150, 450);
-    points[1][0] = new Phaser.Geom.Point(260, 200);
-    points[2][0] = new Phaser.Geom.Point(460, 200);
-    points[3][0] = new Phaser.Geom.Point(600, 400);
+    currentCourbe[0][0] = new Phaser.Geom.Point(150, 450);
+    currentCourbe[1][0] = new Phaser.Geom.Point(260, 200);
+    currentCourbe[2][0] = new Phaser.Geom.Point(460, 200);
+    currentCourbe[3][0] = new Phaser.Geom.Point(600, 400);
   
     // A chaque fois que l'on clique 
     this.input.on('pointerdown', function (pointer) {
       // On ajoute un point
-      points.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
+      courbes.data[courbes.index].push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
     }, this);
     
     // A chaque fois que l'on presse une touche
     this.input.keyboard.on('keydown', function (event) {
+      console.log(event)
       if (event.key == "+") {
         pas += 1;
       }
@@ -46,15 +54,20 @@ function create() {
       if (event.key == "-") {
         pas = Math.max(pas - 1, 0);
       }
+      
+      if (event.key == "ArrowLeft") {
+        courbes.index = Math.max(courbes.index - 1, 0);
+      }
+      if (event.key == "ArrowRight") {
+        courbes.index = Math.min(courbes.index + 1, courbes.data.length);
+      }
     }, this);
-  
-  // pour debuger
-  deCasteljau(points);
-  console.log(points)
 }
 
 // Methode executé a chaque frame
 function update() {
+    const { polygonPoints } = courbes.data[courbes.index] 
+  
     // Clear le canvas
     graphics.clear();
     graphics.fillStyle(0xfffffff); // Couleur des points
@@ -63,11 +76,22 @@ function update() {
     graphics.lineStyle(2, 0x00ff00);
     for (var i = 0; i < points.length - 1; i++) {
         // Permet de dessiner les lignes entre les points (du stade 0)
-        graphics.strokeLineShape(new Phaser.Geom.Line(points[i][0].x, points[i][0].y, points[i + 1][0].x, points[i + 1][0].y));
+        graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[i][0].x, polygonPoints[i][0].y, polygonPoints[i + 1][0].x, polygonPoints[i + 1][0].y));
     }
     
-    var deCasteljauPoints = deCasteljau(points);
-    displayDeCasteljau(deCasteljauPoints); 
+    // On update deCasteljauPoints de la courbe courante
+    courbes.data[courbes.index].deCasteljauPoints = deCasteljau(polygonPoints);
+    displayDeCasteljau(courbes.data[courbes.index].deCasteljauPoints); 
+}
+
+
+function displayDeCasteljau(points) {
+  // Dessine les traits verts
+  graphics.lineStyle(2, 0x000000ff);
+    for (var i = 0; i < points.length - 1; i++) {
+      // Permet de dessiner les lignes entre les points (du stade 0)
+      graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
+    }
 }
 
 // Algorithme de De Casteljau
@@ -93,16 +117,10 @@ function deCasteljau(points) {
     return deCasteljauPoints
 }
 
-function displayDeCasteljau(points) {
-  // Dessine les traits verts
-  graphics.lineStyle(2, 0x000000ff);
-    for (var i = 0; i < points.length - 1; i++) {
-      // Permet de dessiner les lignes entre les points (du stade 0)
-      graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
-    }
-}
 
-function deBoor() {}
+function deBoor(points) {
+  
+}
 
 /*
 def deBoor(k: int, x: int, t, c, p: int):
