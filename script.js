@@ -1,5 +1,6 @@
+// Configuration pour Phaser
 var config = {
-    width: 800,
+    width: 800, // Taille du canvas
     height: 600,
     type: Phaser.AUTO,
     parent: 'phaser-example',
@@ -11,7 +12,7 @@ var config = {
 
 var game = new Phaser.Game(config);
 
-var pas = 3;
+var pas = 1; // précision
 var points;
 var graphics;
 
@@ -101,4 +102,26 @@ function displayDeCasteljau(points) {
     }
 }
 
-function()
+function deBoor() {}
+
+/*
+def deBoor(k: int, x: int, t, c, p: int):
+    """Evaluates S(x).
+
+    Arguments
+    ---------
+    k: Index of knot interval that contains x.
+    x: Position.
+    t: Array of knot positions, needs to be padded as described above.
+    c: Array of control points.
+    p: Degree of B-spline.
+    """
+    d = [c[j + k - p] for j in range(0, p+1)]
+
+    for r in range(1, p+1):
+        for j in range(p, r-1, -1):
+            alpha = (x - t[j+k-p]) / (t[j+1+k-r] - t[j+k-p])
+            d[j] = (1.0 - alpha) * d[j-1] + alpha * d[j]
+
+    return d[p]
+    */
