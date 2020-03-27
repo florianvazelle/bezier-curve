@@ -39,7 +39,7 @@ function create() {
     // A chaque fois que l'on presse une touche
     this.input.keyboard.on('keydown', function (event) {
       if (event.key == "+") {
-        pas = Math.min(pas + 1, points.length - 1);
+        pas += 1;
       }
       
       if (event.key == "-") {
@@ -73,8 +73,8 @@ function update() {
 function deCasteljau(points) {
     var deCasteljauPoints = []
   
-    var n = pas; // Le pas
-    for (var t = 0; t <= 1 ; t += 1/(n*pas)) {
+    var n = points.length - 1; // Le pas
+    for (var t = 0; t <= 1 ; t += 1/(n * pas)) {
         for(var j = 1; j <= n; j++) {
             for (var i = 0; i <= n - j; i++) {
                 points[i][j] = new Phaser.Geom.Point(0, 0);
@@ -100,3 +100,5 @@ function displayDeCasteljau(points) {
       graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
     }
 }
+
+function()
