@@ -49,16 +49,16 @@ function update() {
 
 // De Casteljau's algorithme
 function deCasteljau(points) {
-    var n = points.length - 1;
-    for (var t = 0; t < 1 ; t += 1/n) {
-        for(var j = 1; j < n; j++) {
-            for (var i = 0; i < n - j; i++) {
+    var n = 3;
+    for (var t = 0; t <= 1 ; t += 1/n) {
+        for(var j = 1; j <= n; j++) {
+            for (var i = 0; i <= n - j; i++) {
                 points[i][j] = new Phaser.Geom.Point(0, 0);
                 points[i][j].x = (1 - t) * points[i][j - 1].x + points[i + 1][j - 1].x * t
                 points[i][j].y = (1 - t) * points[i][j - 1].y + points[i + 1][j - 1].y * t
             }
         }
       
-        graphics.fillPointShape(points[0][n - 1], 15);
+        graphics.fillPointShape(points[0][n], 15);
     }
 }
