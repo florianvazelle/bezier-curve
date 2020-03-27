@@ -13,7 +13,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 var pas = 1; // précision
-var points;
+var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
 var graphics;
 
 // Methode executé une seul fois au début
