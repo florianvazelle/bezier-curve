@@ -47,7 +47,7 @@ function update() {
     deCasteljau(points);
 }
 
-// De Casteljau's algorithme
+// De Casteljau algorithme
 function deCasteljau(points) {
     var n = 3;
     for (var t = 0; t <= 1 ; t += 1/n) {
