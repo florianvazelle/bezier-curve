@@ -39,7 +39,7 @@ function create() {
     // A chaque fois que l'on clique 
     this.input.on('pointerdown', function (pointer) {
       // On ajoute un point
-      courbes.data[courbes.index].push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
+      courbes.data[courbes.index].polygonPoints.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
     }, this);
     
     // A chaque fois que l'on presse une touche
@@ -55,7 +55,7 @@ function create() {
       if (event.key == "ArrowLeft") {
         courbes.index = Math.max(courbes.index - 1, 0);
         console.log(courbes.index)
-        if (courbes.data[courbes.index] == undefined) {
+        if (courbes.data[courbes.index].polygonPoints == undefined) {
           courbes.data[courbes.index] = { polygonPoints: [], deCasteljauPoints: [] }
         }
       }
@@ -68,7 +68,8 @@ function create() {
 
 // Methode executé a chaque frame
 function update() {
-    const { polygonPoints } = courbes.data[courbes.index] 
+    const currentIndex = courbes.index
+    const { polygonPoints } = courbes.data[currentIndex] 
   
     // Clear le canvas
     graphics.clear();
@@ -82,8 +83,8 @@ function update() {
     }
     
     // On update deCasteljauPoints de la courbe courante
-    courbes.data[courbes.index].deCasteljauPoints = deCasteljau(courbes.data[courbes.index].polygonPoints);
-    displayDeCasteljau(courbes.data[courbes.index].deCasteljauPoints); 
+    courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
+    displayDeCasteljau(courbes.data[currentIndex].deCasteljauPoints); 
 }
 
 
@@ -119,32 +120,3 @@ function deCasteljau(points) {
     return deCasteljauPoints
 }
 
-/*
-function deBoor(points) {
-  
-    var d = [points[j+point.x - 1]
-  
-}
-*/
-
-/*
-def deBoor(k: int, x: int, t, c, p: int):
-    """Evaluates S(x).
-
-    Arguments
-    ---------
-    k: Index of knot interval that contains x.
-    x: Position.
-    t: Array of knot positions, needs to be padded as described above.
-    c: Array of control points.
-    p: Degree of B-spline.
-    """
-    d = [c[j + k - p] for j in range(0, p+1)]
-
-    for r in range(1, p+1):
-        for j in range(p, r-1, -1):
-            alpha = (x - t[j+k-p]) / (t[j+1+k-r] - t[j+k-p])
-            d[j] = (1.0 - alpha) * d[j-1] + alpha * d[j]
-
-    return d[p]
-    */
