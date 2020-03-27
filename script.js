@@ -23,7 +23,7 @@ function create() {
         points[i] = []
     }
 
-    // Points initiaux aux stade 0
+    // Points initiaux aux stade 0 => polygone de controle
     points[0][0] = new Phaser.Geom.Point(150, 450);
     points[1][0] = new Phaser.Geom.Point(260, 200);
     points[2][0] = new Phaser.Geom.Point(460, 200);
@@ -39,12 +39,12 @@ function create() {
 function update() {
     // Clear le canvas
     graphics.clear();
-    graphics.fillStyle(0xffffff);
+    graphics.fillStyle(0xfffffff);
   
     // Dessine les traits verts
     graphics.lineStyle(2, 0x00ff00);
     for (var i = 0; i < points.length - 1; i++) {
-        // Permet de dessiner les lignes entre les points
+        // Permet de dessiner les lignes entre les points (du stade 0)
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i][0].x, points[i][0].y, points[i + 1][0].x, points[i + 1][0].y));
     }
     
@@ -53,7 +53,7 @@ function update() {
 
 // Algorithme de De Casteljau
 function deCasteljau(points) {
-    var n = 3;
+    var n = 3; // Le pas
     for (var t = 0; t <= 1 ; t += 1/n) {
         for(var j = 1; j <= n; j++) {
             for (var i = 0; i <= n - j; i++) {
