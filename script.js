@@ -11,6 +11,7 @@ var config = {
 
 var game = new Phaser.Game(config);
 
+var pas = 3;
 var points;
 var graphics;
 
@@ -29,16 +30,24 @@ function create() {
     points[2][0] = new Phaser.Geom.Point(460, 200);
     points[3][0] = new Phaser.Geom.Point(600, 400);
   
-    // A chaque fois que l'on clique on ajoute un point
+    // A chaque fois que l'on clique 
     this.input.on('pointerdown', function (pointer) {
+      // On ajoute un point
       points.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
     }, this);
     
+    // A chaque fois que l'on presse une touche
     this.input.keyboard.on('keydown', function (event) {
-      if (event.key == "+") {}
-      if (event.key == "-") {}
+      if (event.key == "+") {
+        pas = Math.min(pas + 1, points.length - 1);
+      }
+      
+      if (event.key == "-") {
+        pas = Math.max(pas - 1, 0);
+      }
     }, this);
   
+  // pour debuger
   deCasteljau(points);
   console.log(points)
 }
@@ -56,13 +65,16 @@ function update() {
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i][0].x, points[i][0].y, points[i + 1][0].x, points[i + 1][0].y));
     }
     
-    deCasteljau(points);
+    var deCasteljauPoints = deCasteljau(points);
+    displayDeCasteljau(deCasteljauPoints); 
 }
 
 // Algorithme de De Casteljau
 function deCasteljau(points) {
-    var n = points.length - 1; // Le pas
-    for (var t = 0; t <= 1 ; t += 1/n) {
+    var deCasteljauPoints = []
+  
+    var n = pas; // Le pas
+    for (var t = 0; t <= 1 ; t += 1/(n*pas)) {
         for(var j = 1; j <= n; j++) {
             for (var i = 0; i <= n - j; i++) {
                 points[i][j] = new Phaser.Geom.Point(0, 0);
@@ -71,10 +83,20 @@ function deCasteljau(points) {
             }
         }
         
+        deCasteljauPoints.push(points[0][n]);
+      
         // Affiche les points blancs
         graphics.fillPointShape(points[0][n], 15);
     }
-   
+  
+    return deCasteljauPoints
 }
 
-function de
+function displayDeCasteljau(points) {
+  // Dessine les traits verts
+  graphics.lineStyle(2, 0x000000ff);
+    for (var i = 0; i < points.length - 1; i++) {
+      // Permet de dessiner les lignes entre les points (du stade 0)
+      graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
+    }
+}
