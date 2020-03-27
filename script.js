@@ -68,7 +68,6 @@ function create() {
 // Methode executé a chaque frame
 function update() {
     const currentIndex = courbes.index
-    const { polygonPoints } = courbes.data[currentIndex] 
   
     // Clear le canvas
     graphics.clear();
@@ -76,14 +75,22 @@ function update() {
   
     // Dessine les traits verts
     graphics.lineStyle(2, 0x00ff00);
-    for (var i = 0; i < polygonPoints.length - 1; i++) {
-        // Permet de dessiner les lignes entre les points (du stade 0)
-        graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[i][0].x, polygonPoints[i][0].y, polygonPoints[i + 1][0].x, polygonPoints[i + 1][0].y));
+    for (var i = 0; i < courbes.data.length; i++) {
+        const { polygonPoints } = courbes.data[i] 
+      
+        for (var j = 0; j < polygonPoints.length - 1; j++) {
+            // Permet de dessiner les lignes entre les points (du stade 0)
+            graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[j][0].x, polygonPoints[j][0].y, polygonPoints[j + 1][0].x, polygonPoints[j + 1][0].y));
+        }
     }
     
     // On update deCasteljauPoints de la courbe courante
     courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
-    displayDeCasteljau(courbes.data[currentIndex].deCasteljauPoints); 
+  
+    for (var i = 0; i < courbes.data.length; i++) {
+        const { deCasteljauPoints } = courbes.data[i] 
+        displayDeCasteljau(deCasteljauPoints);
+    }
 }
 
 function displayLine(points) {
