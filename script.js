@@ -33,13 +33,21 @@ function create() {
     this.input.on('pointerdown', function (pointer) {
       points.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
     }, this);
+    
+    this.input.keyboard.on('keydown', function (event) {
+      if (event.key == "+") {}
+      if (event.key == "-") {}
+    }, this);
+  
+  deCasteljau(points);
+  console.log(points)
 }
 
 // Methode executé a chaque frame
 function update() {
     // Clear le canvas
     graphics.clear();
-    graphics.fillStyle(0xfffffff);
+    graphics.fillStyle(0xfffffff); // Couleur des points
   
     // Dessine les traits verts
     graphics.lineStyle(2, 0x00ff00);
@@ -53,7 +61,7 @@ function update() {
 
 // Algorithme de De Casteljau
 function deCasteljau(points) {
-    var n = 3; // Le pas
+    var n = points.length - 1; // Le pas
     for (var t = 0; t <= 1 ; t += 1/n) {
         for(var j = 1; j <= n; j++) {
             for (var i = 0; i <= n - j; i++) {
@@ -66,4 +74,7 @@ function deCasteljau(points) {
         // Affiche les points blancs
         graphics.fillPointShape(points[0][n], 15);
     }
+   
 }
+
+function de
