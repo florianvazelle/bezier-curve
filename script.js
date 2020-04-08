@@ -20,6 +20,7 @@ var courbes = {
     { 
       polygonPoints: [],
       deCasteljauPoints: [],
+      bSplinePoints: [],
       center () {
         var center = new Phaser.Geom.Point(0, 0);
         var pointsTab = courbes.data[courbes.index].polygonPoints;
@@ -61,7 +62,7 @@ function create() {
              var rect = new Phaser.Geom.Rectangle(point.x, point.y, 1, 1);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                   selectedPoint = point;
-                  pointer=selectedPoint;
+                  
               }
            }
       }
@@ -156,13 +157,15 @@ function update() {
     
     // On update deCasteljauPoints de la courbe courante
     courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
+    courbes.data[currentIndex].bSplinePoints = applyDeBoor(courbes.data[currentIndex].polygonPoints);
   
     for (var i = 0; i < courbes.data.length; i++) {
-        const { deCasteljauPoints } = courbes.data[i] 
+        const { deCasteljauPoints, bSplinePoints } = courbes.data[i] 
         displayDeCasteljau(deCasteljauPoints);
+        displayDeCasteljau(bSplinePoints);
     }
   
-    displayCenter();
+    displayCenter(courbes.data[currentIndex]);
 }
 
 function displayLine(points) {
@@ -172,8 +175,10 @@ function displayLine(points) {
     }  
 }
 
-function displayCenter() {
-  var circle = new Phaser.Geom.Circle(point.x, point.y, 30, 30);
+function displayCenter(data) {
+  var center = data.center();
+  var circle = new Phaser.Geom.Circle(center.x, center.y, 5);
+  graphics.fillCircleShape(circle);
 }
 
 function displayDeCasteljau(points) {
