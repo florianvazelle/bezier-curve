@@ -1,5 +1,8 @@
 
-function deBoor(points) {
+function deBoor(k, x, t, c, p) {
+  for (var j = 0; j < p + 1; j++) {
+    d.push(c[j + k - p])
+  }
   var p = 3
   for(var j = 0 ; j< p+1; j++){
         var d = points[j+points.x - p]

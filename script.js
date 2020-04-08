@@ -13,6 +13,7 @@ var config = {
 var game = new Phaser.Game(config);
 var translateSpeed = 2;
 var pas = 1; // précision
+var rect;
 var courbes = {
   index: 0,
   data: [
@@ -27,26 +28,25 @@ function create() {
     this.input.mouse.disableContextMenu();
   
     graphics = this.add.graphics();
-  
-    for (var i = 0; i < 4; i++) {
-        courbes.data[courbes.index].polygonPoints[i] = []
-    }
 
-    // Points initiaux aux stade 0 => polygone de controle
-    courbes.data[courbes.index].polygonPoints[0][0] = new Phaser.Geom.Point(150, 450);
-    courbes.data[courbes.index].polygonPoints[1][0] = new Phaser.Geom.Point(260, 200);
-    courbes.data[courbes.index].polygonPoints[2][0] = new Phaser.Geom.Point(460, 200);
-    courbes.data[courbes.index].polygonPoints[3][0] = new Phaser.Geom.Point(600, 400);
+    // Points initiaux => polygone de controle
+    courbes.data[courbes.index].polygonPoints[0] = new Phaser.Geom.Point(150, 450);
+    courbes.data[courbes.index].polygonPoints[1] = new Phaser.Geom.Point(260, 200);
+    courbes.data[courbes.index].polygonPoints[2] = new Phaser.Geom.Point(460, 200);
+    courbes.data[courbes.index].polygonPoints[3] = new Phaser.Geom.Point(600, 400);
   
     // A chaque fois que l'on clique 
     this.input.on('pointerdown', function (pointer) {
       if (pointer.rightButtonDown()) {
         // On ajoute un point
-        courbes.data[courbes.index].polygonPoints.push([new Phaser.Geom.Point(pointer.x, pointer.y),new Phaser.Geom.Point(pointer.x, pointer.y),new Phaser.Geom.Point(pointer.x, pointer.y)]);
+        courbes.data[courbes.index].polygonPoints.push(new Phaser.Geom.Point(pointer.x, pointer.y));
       } else {
-        //https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
-           for(var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++){
-             
+          // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
+           for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
+             rect = new Phaser.Geom.Rectangle(25,200,300,200);
+             if( Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
+                            
+                }
              
            }
       }
@@ -64,18 +64,12 @@ function create() {
         pas = Math.max(pas - 1, 0);
       }
       
-      // configuration des touches
-      if (event.key == "s") {
-        // On ajoute un point
-        courbes.data[courbes.index]
+      if (event.key == "i") {
+        movePointsUp();
       }
       
-      if (event.key == "i") {
-        // On bouges les points vers le haut
-        for (var i = 0; i < courbes.data[courbes.index].polygonPoints.length; i++) {
-          courbes.data[courbes.index].polygonPoints[i][0].y -= translateSpeed;
-        }
-        console.log("Test Antoine")
+      if (event.key == "k") {
+        movePointsDown();
       }
       
       if (event.key == "ArrowLeft") {
@@ -116,8 +110,8 @@ function update() {
         const { polygonPoints } = courbes.data[i] 
       
         for (var j = 0; j < polygonPoints.length - 1; j++) {
-            // Permet de dessiner les lignes entre les points (du stade 0)
-            graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[j][0].x, polygonPoints[j][0].y, polygonPoints[j + 1][0].x, polygonPoints[j + 1][0].y));
+            // Permet de dessiner les lignes du polygone de controle
+            graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[j].x, polygonPoints[j].y, polygonPoints[j + 1].x, polygonPoints[j + 1].y));
         }
     }
     
@@ -132,7 +126,7 @@ function update() {
 
 function displayLine(points) {
     for (var i = 0; i < points.length - 1; i++) {
-        // Permet de dessiner les lignes entre les points (du stade 0)
+        // Permet de dessiner les lignes entre les points
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
     }  
 }
@@ -148,7 +142,14 @@ function selectPoint(points){
 }
 
 // Algorithme de De Casteljau
-function deCasteljau(points) {
+function deCasteljau(p) {
+    // on met tout les points du polygone de controle au stade 0 
+    var points = []
+    for (var i = 0; i < p.length; i++) {
+        points[i] = []
+        points[i][0] = p[i]
+    }
+  
     var deCasteljauPoints = []
     var n = points.length - 1;
   
