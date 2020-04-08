@@ -2,9 +2,8 @@
 var config = {
     width: 800, // Taille du canvas
     height: 600,
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     parent: 'phaser-example',
-    canvas: document.getElementById('myCustomCanvas'),
     scene: {
         create: create,
         update: update
@@ -73,6 +72,10 @@ function create() {
           courbes.data = [{ polygonPoints: [], deCasteljauPoints: [] }]
           courbes.index = 0
         }
+      }
+      
+      if(event.key == "s"){
+        
       }
     }, this);
 }
