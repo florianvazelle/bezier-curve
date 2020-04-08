@@ -2,8 +2,9 @@
 var config = {
     width: 800, // Taille du canvas
     height: 600,
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     parent: 'phaser-example',
+    canvas: document.getElementById('myCustomCanvas'),
     scene: {
         create: create,
         update: update
