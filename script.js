@@ -81,9 +81,7 @@ function create() {
 }
 
 // Methode executé a chaque frame
-function update() {
-    document.getElementById('pas').innerText = pas
-  
+function update() {  
     const currentIndex = courbes.index
   
     // Clear le canvas
@@ -121,6 +119,10 @@ function displayDeCasteljau(points) {
     // Dessine les traits verts
     graphics.lineStyle(2, 0x000000ff);
     displayLine(points)
+}
+
+function selectPoint(points){
+  
 }
 
 // Algorithme de De Casteljau

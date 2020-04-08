@@ -9,10 +9,7 @@ function deBoor(points) {
     for(var j = p  ; j!=r-1 ; -1){
       alpha = (x-)
     }
-  }
-  
-  
-  
+  } 
 }
 
 
@@ -36,4 +33,4 @@ def deBoor(k: int, x: int, t, c, p: int):
             d[j] = (1.0 - alpha) * d[j-1] + alpha * d[j]
 
     return d[p]
-    */
+*/
