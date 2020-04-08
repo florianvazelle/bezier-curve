@@ -44,6 +44,7 @@ function create() {
     
     // A chaque fois que l'on presse une touche
     this.input.keyboard.on('keydown', function (event) {
+      console.log(event.key)
       if (event.key == "+") {
         pas += 1;
       }
@@ -60,6 +61,16 @@ function create() {
         courbes.index = Math.min(courbes.index + 1, courbes.data.length);
         if (courbes.data[courbes.index] == undefined) {
           courbes.data[courbes.index] = { polygonPoints: [], deCasteljauPoints: [] }
+        }
+      }
+      
+      if (event.key == "Delete") {
+        if (courbes.index < courbes.data.length && courbes.data.length > 1) {
+          courbes.data.splice(courbes.index, 1);
+          courbes.index = Math.min(Math.max(courbes.index, 0), courbes.data.length - 1);
+        } else if(courbes.data.length == 1) {
+          courbes.data = [{ polygonPoints: [], deCasteljauPoints: [] }]
+          courbes.index = 0
         }
       }
     }, this);
