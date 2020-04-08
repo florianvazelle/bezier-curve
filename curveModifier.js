@@ -27,11 +27,5 @@ function movePointsLeft(tab, speed) {
 }
 
 function rotatePointsRight(tab, speed) {
-  var moyX;
-  var moyY;
-  
-  for (var i = 0; i < tab.length; i++) {
-    moyX += tab[i].x;
-    moyY += tab[i].y;
-  }
+  //console.log(tab.center);
 }

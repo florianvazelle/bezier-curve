@@ -16,6 +16,7 @@ function deBoor(k, x, t, c, p) {
 }
 
 
+
 /*
 def deBoor(k: int, x: int, t, c, p: int): 
     """Evaluates S(x).
