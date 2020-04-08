@@ -165,7 +165,7 @@ function update() {
         displayDeCasteljau(bSplinePoints);
     }
   
-    displayCenter(courbes.data[currentIndex]);
+    //displayCenter(courbes.data[currentIndex]);
 }
 
 function displayLine(points) {

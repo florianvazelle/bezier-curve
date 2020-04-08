@@ -22,7 +22,7 @@ function applyDeBoor(polygonPoints) {
     var t = Phaser.Geom.Line.GetPoints(line, 10);
     
     for (var k = 0; k < t.length; k++) {
-      bSplinePoints.push(deBoor(k, t[k], t, polygonPoints, 60));
+      //bSplinePoints.push(deBoor(k, t[k], t, polygonPoints, 60));
     }
   }
   return bSplinePoints
