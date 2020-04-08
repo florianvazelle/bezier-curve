@@ -15,7 +15,9 @@ function deBoor(k, x, t, c, p) {
   return d[p]
 }
 
-
+function () {
+  
+}
 
 /*
 def deBoor(k: int, x: int, t, c, p: int): 

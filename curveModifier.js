@@ -26,6 +26,6 @@ function movePointsLeft(tab, speed) {
   }
 }
 
-function rotatePointsRight(tab, speed) {
-  //console.log(tab.center);
+function rotatePointsRight(data, speed) {
+  console.log(data.center());
 }

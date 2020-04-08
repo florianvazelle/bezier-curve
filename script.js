@@ -21,7 +21,7 @@ var courbes = {
       polygonPoints: [],
       deCasteljauPoints: [],
       center () {
-        var center = Phaser.Geom.Point(0, 0);
+        var center = new Phaser.Geom.Point(0, 0);
         var pointsTab = courbes.data[courbes.index].polygonPoints;
         for (var i = 0; i < pointsTab.length; i++) {
           center.x += pointsTab[i].x;
@@ -58,9 +58,10 @@ function create() {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
              var point = courbes.data[courbes.index].polygonPoints[i]
-             var rect = new Phaser.Geom.Rectangle(point.x, point.y, 10, 10);
+             var rect = new Phaser.Geom.Rectangle(point.x, point.y, 1, 1);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
-                  selectedPoint = point
+                  selectedPoint = point;
+                  pointer=selectedPoint;
               }
            }
       }
@@ -95,8 +96,7 @@ function create() {
       }
       
       if (event.key == "u") {
-        var test = courbes.data[courbes.index].center();
-        console.log(test);
+        rotatePointsRight(courbes.data[courbes.index], translateSpeed);
       }
       
       if (event.key == "ArrowLeft") {
@@ -131,15 +131,15 @@ function update() {
     graphics.clear();
     graphics.fillStyle(0xfffffff); // Couleur des points
     
-    if (selectedPoint) {
-      var rect = new Phaser.Geom.Rectangle(selectedPoint.x,selectedPoint.y, 100, 100);
-      graphics.fillStyle(0x00aa00);
-      graphics.strokeRectShape(rect);
-    }
-  
     for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
-      var rect = new Phaser.Geom.Rectangle(courbes.data[courbes.index].polygonPoints[i].x,courbes.data[courbes.index].polygonPoints[i].y,60,60);
-      graphics.fillStyle(0xaa0000);
+      var point = courbes.data[courbes.index].polygonPoints[i]
+      var rect = new Phaser.Geom.Rectangle(point.x, point.y, 30, 30);
+      console.log(point == selectedPoint)
+      if (point == selectedPoint) {
+        graphics.fillStyle(0x00aa00);
+      } else {
+        graphics.fillStyle(0xaa0000);
+      }
       graphics.strokeRectShape(rect);
     }
   
@@ -161,6 +161,8 @@ function update() {
         const { deCasteljauPoints } = courbes.data[i] 
         displayDeCasteljau(deCasteljauPoints);
     }
+  
+    displayCenter();
 }
 
 function displayLine(points) {
@@ -168,6 +170,10 @@ function displayLine(points) {
         // Permet de dessiner les lignes entre les points
         graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
     }  
+}
+
+function displayCenter() {
+  var circle = new Phaser.Geom.Circle(point.x, point.y, 30, 30);
 }
 
 function displayDeCasteljau(points) {
