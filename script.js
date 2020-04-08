@@ -53,6 +53,17 @@ function create() {
         pas = Math.max(pas - 1, 0);
       }
       
+      // configuration des touches
+      if (event.key == "s") {
+        // On ajoute un point
+        courbes.data[courbes.index]
+      }
+      
+      if (event.key == "i") {
+        // On bouges les points vers le haut
+        courbes.data[courbes.index]
+      }
+      
       if (event.key == "ArrowLeft") {
         courbes.index = Math.max(courbes.index - 1, 0);
       }
@@ -74,9 +85,6 @@ function create() {
         }
       }
       
-      if(event.key == "s"){
-        
-      }
     }, this);
 }
 
