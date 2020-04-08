@@ -11,7 +11,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-
+var translateSpeed = 2;
 var pas = 1; // précision
 var courbes = {
   index: 0,
@@ -24,6 +24,8 @@ var graphics;
 
 // Methode executé une seul fois au début
 function create() {
+    this.input.mouse.disableContextMenu();
+  
     graphics = this.add.graphics();
   
     for (var i = 0; i < 4; i++) {
@@ -38,8 +40,17 @@ function create() {
   
     // A chaque fois que l'on clique 
     this.input.on('pointerdown', function (pointer) {
-      // On ajoute un point
-      courbes.data[courbes.index].polygonPoints.push([new Phaser.Geom.Point(pointer.x, pointer.y)]);
+      if (pointer.rightButtonDown()) {
+        // On ajoute un point
+        courbes.data[courbes.index].polygonPoints.push([new Phaser.Geom.Point(pointer.x, pointer.y),new Phaser.Geom.Point(pointer.x, pointer.y),new Phaser.Geom.Point(pointer.x, pointer.y)]);
+      } else {
+        //https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
+           for(var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++){
+             
+             
+           }
+      }
+      
     }, this);
     
     // A chaque fois que l'on presse une touche
@@ -61,7 +72,10 @@ function create() {
       
       if (event.key == "i") {
         // On bouges les points vers le haut
-        courbes.data[courbes.index]
+        for (var i = 0; i < courbes.data[courbes.index].polygonPoints.length; i++) {
+          courbes.data[courbes.index].polygonPoints[i][0].y -= translateSpeed;
+        }
+        console.log("Test Antoine")
       }
       
       if (event.key == "ArrowLeft") {
@@ -150,7 +164,7 @@ function deCasteljau(points) {
           }
           
           // Affiche les points blancs
-          graphics.fillPointShape(points[0][n], 15);
+          graphics.fillPointShape(points[0][n], 10);
           deCasteljauPoints.push(points[0][n]);
       }
     }
