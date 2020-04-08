@@ -18,11 +18,14 @@ function deBoor(k, x, knots, polygonPoints, degree) {
 
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
+  return []
   for (var j = 0; j < polygonPoints.length - 1; j++) {
-    var knots = [0, 1, 2, 3];
+    
+    // knots.length = polygonPoints.length + degree + 1
+    var knots = [0, 0, 0, 1, 2, 2, 2];
 
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(k, knots[k], knots, polygonPoints, 60));
+      bSplinePoints.push(deBoor(k, knots[k], knots, polygonPoints, 2));
     }
   }
   console.log(bSplinePoints)
