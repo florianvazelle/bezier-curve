@@ -13,7 +13,7 @@ var config = {
 var game = new Phaser.Game(config);
 var translateSpeed = 2;
 var pas = 1; // précision
-var selectedPoint;
+var selectedPoint = { index: -1 };
 var courbes = {
   index: 0,
   data: [new Curve()]
@@ -44,10 +44,22 @@ function create() {
              var point = courbes.data[courbes.index].polygonPoints[i]
              var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
-                  selectedPoint = point;
+                  selectedPoint = { value: point, index: i };
+                  
               }
            }
       } 
+    }, this);
+  
+    this.input.on('pointermove', function (pointer) {
+        if (selectedPoint.index != -1)
+          selectedPoint.value = pointer;
+
+    }, this);
+  
+    this.input.on('pointerup', function (pointer) {
+      courbes.data[courbes.index].polygonPoints[selectedPoint.index] = selectedPoint.value;
+      selectedPoint.index = -1
     }, this);
     
     // A chaque fois que l'on presse une touche
