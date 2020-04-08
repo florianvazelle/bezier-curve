@@ -78,6 +78,8 @@ function create() {
 
 // Methode executé a chaque frame
 function update() {
+    document.getElementById('pas').innerText = pas
+  
     const currentIndex = courbes.index
   
     // Clear le canvas
