@@ -58,7 +58,6 @@ function create() {
     }, this);
   
     this.input.on('pointerup', function (pointer) {
-      
       courbes.data[courbes.index].polygonPoints[selectedPoint.index] = selectedPoint.value;
       selectedPoint.index = -1
     }, this);
@@ -128,14 +127,7 @@ function update() {
     
     for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
       var point = courbes.data[courbes.index].polygonPoints[i]
-      var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
-      console.log(point == selectedPoint)
-      if (point == selectedPoint) {
-        graphics.fillStyle(0x00aa00);
-      } else {
-        graphics.fillStyle(0xaa0000);
-      }
-      graphics.strokeRectShape(rect);
+      graphics.fillPointShape(point, 12);
     }
   
     // Dessine les traits verts

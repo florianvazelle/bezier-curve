@@ -21,10 +21,10 @@ function applyDeBoor(polygonPoints) {
   return bSplinePoints
   for (var j = 0; j < polygonPoints.length - 1; j++) {
     var line = new Phaser.Geom.Line(polygonPoints[j].x, polygonPoints[j].y, polygonPoints[j + 1].x, polygonPoints[j + 1].y);
-    var t = Phaser.Geom.Line.GetPoints(line, 10);
+    var t = Phaser.Geom.Line.GetPoints(line, 4);
 
     for (var k = 0; k < t.length; k++) {
-      //bSplinePoints.push(deBoor(k, t[k], t, polygonPoints, 60));
+      bSplinePoints.push(deBoor(k, t[k], t, polygonPoints, 60));
     }
   }
   return bSplinePoints
