@@ -13,11 +13,23 @@ var config = {
 var game = new Phaser.Game(config);
 var translateSpeed = 2;
 var pas = 1; // précision
-var rect;
+var selectedPoint;
 var courbes = {
   index: 0,
   data: [
-    { polygonPoints: [], deCasteljauPoints: [] }
+    { 
+      polygonPoints: [],
+      deCasteljauPoints: [],
+      center () {
+        var center = [0, 0];
+        var pointsAmount = courbes.data[courbes.index].polygonPoints.length;
+        for (var i = 0; i < pointsAmount; i++) {
+          center.x += courbes.data[courbes.index].polygonPoints[i].x;
+          center.y += courbes.data[courbes.index].polygonPoints[i].y;
+        }
+        center.x = center.x / 
+      }
+    }
   ]
 };
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
@@ -43,11 +55,8 @@ function create() {
       } else {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
-             courbes.data[courbes.index].polygonPoints[i] = new Phaser.Geom.Rectangle(25,20,30,20);
-          /*   if(Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
-                            
-                }
-             */
+             var rect = new Phaser.Geom.Rectangle(courbes.data[courbes.index].polygonPoints[i].x,courbes.data[courbes.index].polygonPoints[i].index.y,60,60);
+
            }
       }
       
@@ -175,6 +184,8 @@ function deCasteljau(p) {
           // Affiche les points blancs
           graphics.fillPointShape(points[0][n], 10);
           deCasteljauPoints.push(points[0][n]);
+        
+          
       }
     }
   
