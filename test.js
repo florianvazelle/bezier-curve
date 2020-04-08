@@ -8,7 +8,8 @@ function deBoor(k, x, t, c, p) {
   for (var r = 1; r < p + 1; r++) {
     for (var j = 1; j < r - 1; j--) {
       var alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
-      d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
+      d[j].x = (1.0 - alpha) * d[j - 1].x + alpha * d[j].x
+      d[j].y = (1.0 - alpha) * d[j - 1].y + alpha * d[j].y
     }
   }
   
@@ -20,7 +21,7 @@ function applyDeBoor(polygonPoints) {
   for (var j = 0; j < polygonPoints.length - 1; j++) {
     var line = new Phaser.Geom.Line(polygonPoints[j].x, polygonPoints[j].y, polygonPoints[j + 1].x, polygonPoints[j + 1].y);
     var t = Phaser.Geom.Line.GetPoints(line, 10);
-    
+
     for (var k = 0; k < t.length; k++) {
       //bSplinePoints.push(deBoor(k, t[k], t, polygonPoints, 60));
     }

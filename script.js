@@ -16,24 +16,7 @@ var pas = 1; // précision
 var selectedPoint;
 var courbes = {
   index: 0,
-  data: [
-    { 
-      polygonPoints: [],
-      deCasteljauPoints: [],
-      bSplinePoints: [],
-      center () {
-        var center = new Phaser.Geom.Point(0, 0);
-        var pointsTab = courbes.data[courbes.index].polygonPoints;
-        for (var i = 0; i < pointsTab.length; i++) {
-          center.x += pointsTab[i].x;
-          center.y += pointsTab[i].y;
-        }
-        center.x = center.x / pointsTab.length;
-        center.y = center.y / pointsTab.length;
-        return center;
-      }
-    }
-  ]
+  data: [new Curve()]
 };
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
 var graphics;
@@ -59,14 +42,12 @@ function create() {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
              var point = courbes.data[courbes.index].polygonPoints[i]
-             var rect = new Phaser.Geom.Rectangle(point.x, point.y, 1, 1);
+             var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                   selectedPoint = point;
-                  
               }
            }
-      }
-      
+      } 
     }, this);
     
     // A chaque fois que l'on presse une touche
@@ -107,7 +88,7 @@ function create() {
       if (event.key == "ArrowRight") {
         courbes.index = Math.min(courbes.index + 1, courbes.data.length);
         if (courbes.data[courbes.index] == undefined) {
-          courbes.data[courbes.index] = { polygonPoints: [], deCasteljauPoints: [] }
+          courbes.data[courbes.index] = new Curve()
         }
       }
       
@@ -116,7 +97,7 @@ function create() {
           courbes.data.splice(courbes.index, 1);
           courbes.index = Math.min(Math.max(courbes.index, 0), courbes.data.length - 1);
         } else if(courbes.data.length == 1) {
-          courbes.data = [{ polygonPoints: [], deCasteljauPoints: [] }]
+          courbes.data = [new Curve()]
           courbes.index = 0
         }
       }
@@ -134,7 +115,7 @@ function update() {
     
     for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
       var point = courbes.data[courbes.index].polygonPoints[i]
-      var rect = new Phaser.Geom.Rectangle(point.x, point.y, 30, 30);
+      var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
       console.log(point == selectedPoint)
       if (point == selectedPoint) {
         graphics.fillStyle(0x00aa00);
@@ -165,7 +146,7 @@ function update() {
         displayDeCasteljau(bSplinePoints);
     }
   
-    //displayCenter(courbes.data[currentIndex]);
+    displayCenter(courbes.data[currentIndex]);
 }
 
 function displayLine(points) {
@@ -176,6 +157,7 @@ function displayLine(points) {
 }
 
 function displayCenter(data) {
+  graphics.fillStyle(0xfffff00); // Couleur des points
   var center = data.center();
   var circle = new Phaser.Geom.Circle(center.x, center.y, 5);
   graphics.fillCircleShape(circle);
