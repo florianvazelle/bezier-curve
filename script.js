@@ -38,26 +38,27 @@ function create() {
       if (pointer.rightButtonDown()) {
         // On ajoute un point
         courbes.data[courbes.index].polygonPoints.push(new Phaser.Geom.Point(pointer.x, pointer.y));
-      } else {
+      } else if(pointer.leftButtonDown()){
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
              var point = courbes.data[courbes.index].polygonPoints[i]
              var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                   selectedPoint = { value: point, index: i };
-                  
               }
            }
       } 
     }, this);
   
     this.input.on('pointermove', function (pointer) {
-        if (selectedPoint.index != -1)
-          selectedPoint.value = pointer;
-
+        if (selectedPoint.index != -1) {
+          selectedPoint.value.x = pointer.x;
+          selectedPoint.value.y = pointer.y;
+        }
     }, this);
   
     this.input.on('pointerup', function (pointer) {
+      
       courbes.data[courbes.index].polygonPoints[selectedPoint.index] = selectedPoint.value;
       selectedPoint.index = -1
     }, this);
@@ -206,7 +207,7 @@ function deCasteljau(p) {
           }
           
           // Affiche les points blancs
-          graphics.fillPointShape(points[0][n], 10);
+          //graphics.fillPointShape(points[0][n], 10);
           deCasteljauPoints.push(points[0][n]);
         
           
