@@ -1,4 +1,4 @@
-function movePointsUp(tab) {
+function movePointsUp(tab, translateSpeed) {
   // On bouges les points vers le haut
   for (var i = 0; i < tab.length; i++) {
     tab[i].y -= translateSpeed;

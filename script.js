@@ -43,8 +43,8 @@ function create() {
       } else {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
-             rect = new Phaser.Geom.Rectangle(25,200,300,200);
-             if( Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
+             rect = new Phaser.Geom.Rectangle(25,20,30,20);
+             if(Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                             
                 }
              
