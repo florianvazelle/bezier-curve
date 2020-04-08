@@ -43,11 +43,11 @@ function create() {
       } else {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
-             rect = new Phaser.Geom.Rectangle(25,20,30,20);
-             if(Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
+             courbes.data[courbes.index].polygonPoints[i] = new Phaser.Geom.Rectangle(25,20,30,20);
+          /*   if(Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                             
                 }
-             
+             */
            }
       }
       
@@ -65,11 +65,19 @@ function create() {
       }
       
       if (event.key == "i") {
-        movePointsUp();
+        movePointsUp(courbes.data[courbes.index].polygonPoints, translateSpeed);
       }
       
       if (event.key == "k") {
-        movePointsDown();
+        movePointsDown(courbes.data[courbes.index].polygonPoints, translateSpeed);
+      }
+      
+      if (event.key == "j") {
+        movePointsRight(courbes.data[courbes.index].polygonPoints, translateSpeed);
+      }
+      
+      if (event.key == "l") {
+        movePointsLeft(courbes.data[courbes.index].polygonPoints, translateSpeed);
       }
       
       if (event.key == "ArrowLeft") {
@@ -171,4 +179,4 @@ function deCasteljau(p) {
     }
   
     return deCasteljauPoints
-}
+}  

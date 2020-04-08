@@ -1,18 +1,18 @@
-
+ // c => polygonPoints
 function deBoor(k, x, t, c, p) {
+  var d = []
   for (var j = 0; j < p + 1; j++) {
     d.push(c[j + k - p])
   }
-  var p = 3
-  for(var j = 0 ; j< p+1; j++){
-        var d = points[j+points.x - p]
-        }
-
-  for(var r =1 ; r< p+1 ; r++){
-    for(var j = p  ; j!=r-1 ; -1){
-      alpha = (x-)
+  
+  for (var r = 1; r < p + 1; r++) {
+    for (var j = 1; j < r - 1; j--) {
+      var alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
+      d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
     }
-  } 
+  }
+  
+  return d[p]
 }
 
 

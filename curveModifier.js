@@ -1,13 +1,29 @@
-function movePointsUp(tab, translateSpeed) {
+function movePointsUp(tab, speed) {
   // On bouges les points vers le haut
   for (var i = 0; i < tab.length; i++) {
-    tab[i].y -= translateSpeed;
+    tab[i].y -= speed;
   }
 }
 
-function movePointsDown() {
-  // On bouges les points vers le bas
-  for (var i = 0; i < courbes.data[courbes.index].polygonPoints.length; i++) {
-    courbes.data[courbes.index].polygonPoints[i].y += translateSpeed;
+function movePointsDown(tab, speed) {
+  // On bouges les points vers le haut
+  for (var i = 0; i < tab.length; i++) {
+    tab[i].y += speed;
   }
 }
+
+function movePointsRight(tab, speed) {
+  // On bouges les points vers le haut
+  for (var i = 0; i < tab.length; i++) {
+    tab[i].x -= speed;
+  }
+}
+
+function movePointsLeft(tab, speed) {
+  // On bouges les points vers le haut
+  for (var i = 0; i < tab.length; i++) {
+    tab[i].x += speed;
+  }
+}
+
+function rotatePointsRight(tab, )
