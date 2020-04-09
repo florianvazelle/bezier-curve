@@ -2,7 +2,7 @@
 function deBoor(k, x, knots, polygonPoints, degree) {
   var d = []
   for (var j = 0; j < degree + 1; j++) {
-    d.push(polygonPoints[Math.floor(j + k - degree)])
+    d.push(new Phaser.Geom.Point(polygonPoints[Math.floor(j + k - degree)]))
   }
 
   for (var r = 1; r < degree + 1; r++) {
