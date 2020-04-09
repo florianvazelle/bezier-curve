@@ -128,6 +128,10 @@ function update() {
     for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
       var point = courbes.data[courbes.index].polygonPoints[i]
       graphics.fillPointShape(point, 12);
+      if (selectedPoint.value == point) {
+        var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
+        graphics.strokeRectShape(rect);
+      }
     }
   
     // Dessine les traits verts
@@ -201,7 +205,6 @@ function deCasteljau(p) {
           // Affiche les points blancs
           //graphics.fillPointShape(points[0][n], 10);
           deCasteljauPoints.push(points[0][n]);
-        
           
       }
     }
