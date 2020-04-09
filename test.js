@@ -24,11 +24,15 @@ function applyDeBoor(polygonPoints) {
   const degree = 3 // degree
   const n = polygonPoints.length - 1
   const knots = [0, 0, 0, 1, 1, 2, 2, 2] // length = n + degree + 2
-  const t = knots[degree + 1] 
+  const i = degree + 1 // k <= i <= n
+  const t = knots[i] 
+  
+  if (!(degree <= i)) console.log('degree is not <= at i')
+  if (!(i <= n)) console.log('i is not <= at n')
   for (var j = 0; j < polygonPoints.length - 1; j++) {
-    
+
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(k, t, knots, polygonPoints, degree));
+      bSplinePoints.push(deBoor(i, t, knots, polygonPoints, degree));
     }
   }
   console.log(bSplinePoints)
