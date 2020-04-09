@@ -1,4 +1,5 @@
-function deBoor(k, x, knots, polygonPoints, degree) {
+// évalue S(x)
+function deBoor2(k, x, knots, polygonPoints, degree) {
   var d = []
   for (var j = 0; j < degree + 1; j++) {
     d.push(polygonPoints[j + k - degree])
@@ -15,16 +16,35 @@ function deBoor(k, x, knots, polygonPoints, degree) {
   return d[degree]
 }
 
+function deBoor(k, degree, i, x, knots, ctrlPoints) { 
+    if(k == 0) {
+      console.log(i)
+      return ctrlPoints[i]
+    } else {
+        var alpha = (x - knots[i]) / (knots[i + degree + 1 - k] - knots[i])
+      
+        var p1 = deBoor(k - 1, degree, i - 1, x, knots, ctrlPoints)
+        p1.x *= (1 - alpha)
+        p1.y *= (1 - alpha)
+      
+        var p2 = deBoor(k - 1, degree, i, x, knots, ctrlPoints)
+        p2.x *= alpha
+        p2.y *= alpha
+      
+        var p3 = new Phaser.Geom.Point(p1.x + p2.x, p1.y + p1.y)
+        return p3
+    }
+}
+
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
-  return []
   for (var j = 0; j < polygonPoints.length - 1; j++) {
     
     // knots.length = polygonPoints.length + degree + 1
     var knots = [0, 0, 0, 1, 2, 2, 2];
 
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(k, knots[k], knots, polygonPoints, 2));
+      bSplinePoints.push(deBoor(k, 2, k-j, knots[k], knots, polygonPoints));
     }
   }
   console.log(bSplinePoints)
