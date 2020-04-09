@@ -16,6 +16,7 @@ function deBoor(k, x, knots, polygonPoints, degree) {
   return d[degree]
 }
 
+var test = true
 function applyDeBoor(polygonPoints) {
   var ctrlPoints = []
   for (var i = 0; i < polygonPoints.length; i++) {
@@ -35,7 +36,11 @@ function applyDeBoor(polygonPoints) {
     let t = knots[i]
     bSplinePoints.push(deBoor(i, t, knots, ctrlPoints, degree));
   }
-
+  
+  if (test) {
+    test = false
+    console.log(bSplinePoints)
+  }
   return bSplinePoints
 }
 

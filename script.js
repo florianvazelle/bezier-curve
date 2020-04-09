@@ -139,14 +139,9 @@ function update() {
     }
   
     // Dessine les traits verts
-    graphics.lineStyle(2, 0x00ff00);
     for (var i = 0; i < courbes.data.length; i++) {
         const { polygonPoints } = courbes.data[i] 
-      
-        for (var j = 0; j < polygonPoints.length - 1; j++) {
-            // Permet de dessiner les lignes du polygone de controle
-            graphics.strokeLineShape(new Phaser.Geom.Line(polygonPoints[j].x, polygonPoints[j].y, polygonPoints[j + 1].x, polygonPoints[j + 1].y));
-        }
+        displayLine(polygonPoints, 0x00ff00);
     }
     
     // On update deCasteljauPoints de la courbe courante
@@ -155,17 +150,18 @@ function update() {
   
     for (var i = 0; i < courbes.data.length; i++) {
         const { deCasteljauPoints, bSplinePoints } = courbes.data[i] 
-        displayDeCasteljau(deCasteljauPoints);
-        displayDeCasteljau(bSplinePoints);
+        displayLine(deCasteljauPoints, 0x000000ff);
+        displayLine(bSplinePoints, 0x0000ffff);
     }
   
     displayCenter(courbes.data[currentIndex]);
 }
 
-function displayLine(points) {
+function displayLine(points, color) {
+    graphics.lineStyle(2, color);
     for (var i = 0; i < points.length - 1; i++) {
         // Permet de dessiner les lignes entre les points
-        graphics.strokeLineShape(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+        graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
     }  
 }
 
@@ -175,13 +171,6 @@ function displayCenter(data) {
   var circle = new Phaser.Geom.Circle(center.x, center.y, 5);
   graphics.fillCircleShape(circle);
 }
-
-function displayDeCasteljau(points) {
-    // Dessine les traits verts
-    graphics.lineStyle(2, 0x0000ff);
-    displayLine(points)
-}
-
 
 // Algorithme de De Casteljau
 function deCasteljau(p) {
