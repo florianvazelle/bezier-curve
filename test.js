@@ -35,18 +35,6 @@ function deBoor(k, degree, i, x, knots, ctrlPoints) {
     }
 }
 
-function WhichInterval(double x, double *knot, int ti)
-{
-for(int i=1;i<ti-1;i++)
-{
-if(x<knot[i])
-return(i-1);
-else if(x == knot[ti-1])
-return(ti-1);
-}
-return -1;
-}
-
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
   for (var j = 0; j < polygonPoints.length - 1; j++) {
@@ -55,7 +43,7 @@ function applyDeBoor(polygonPoints) {
     var knots = [0, 0, 1, 1];
 
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(k, 2, 0, knots[k], knots, polygonPoints));
+      bSplinePoints.push(deBoor(k, 2, k, knots[k], knots, polygonPoints));
     }
   }
   console.log(bSplinePoints)
