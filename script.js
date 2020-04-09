@@ -18,6 +18,7 @@ var courbes = {
   index: 0,
   data: [new Curve()]
 };
+var mouse = new Phaser.Geom.Point(0, 0);
 var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
 var graphics;
 
@@ -42,7 +43,7 @@ function create() {
           // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
            for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
              var point = courbes.data[courbes.index].polygonPoints[i]
-             var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
+             var rect = new Phaser.Geom.Rectangle(point.x - 10, point.y - 10, 20, 20);
               if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
                   selectedPoint = { value: point, index: i };
               }
@@ -55,6 +56,8 @@ function create() {
           selectedPoint.value.x = pointer.x;
           selectedPoint.value.y = pointer.y;
         }
+      mouse.x = pointer.x;
+      mouse.y = pointer.y;
     }, this);
   
     this.input.on('pointerup', function (pointer) {
@@ -128,9 +131,10 @@ function update() {
     for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
       var point = courbes.data[courbes.index].polygonPoints[i]
       graphics.fillPointShape(point, 12);
-      if (selectedPoint.value == point) {
-        var rect = new Phaser.Geom.Rectangle(point.x - 5, point.y - 5, 10, 10);
-        graphics.strokeRectShape(rect);
+      var rect = new Phaser.Geom.Rectangle(point.x - 10, point.y - 10, 20, 20);
+      if (Phaser.Geom.Rectangle.ContainsPoint(rect, mouse)) {
+          graphics.lineStyle(2, 0xfffffff);
+          graphics.strokeRectShape(rect);
       }
     }
   
