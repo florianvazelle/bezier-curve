@@ -51,21 +51,25 @@ function deBoor(polygonPoints, knots, k, u)
 			matrix[i][j] = new Phaser.Geom.Point(x, y);
 		}
 	}
+  
 	return matrix[firstKnot - (k - 1)][k - 1];
 }
-
+var t = false 
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
+  if (t) return []
   for (var j = 0; j < polygonPoints.length - 1; j++) {
     
     // knots.length = polygonPoints.length + degree + 1
-    var knots = [0, 0, 0, 1, 2, 2, 2];
+    var knots = [0, 1, 2, 3];
 
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(polygonPoints, knots, k, 2));
+      //bSplinePoints.push(deBoor(polygonPoints, knots, k, 2));
+      bSplinePoints.push(deBoor2(k, knots[k], knots, polygonPoints, 2) )
     }
   }
   console.log(bSplinePoints)
+  t = true
   return []
 }
 
