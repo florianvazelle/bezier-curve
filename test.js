@@ -16,24 +16,42 @@ function deBoor2(k, x, knots, polygonPoints, degree) {
   return d[degree]
 }
 
-function deBoor(k, degree, i, x, knots, ctrlPoints) { 
-    if(k == 0) {
-      console.log(i)
-      return ctrlPoints[i]
-    } else {
-        var alpha = (x - knots[i]) / (knots[i + degree + 1 - k] - knots[i])
-      
-        var p1 = deBoor(k - 1, degree, i - 1, x, knots, ctrlPoints)
-        p1.x *= (1 - alpha)
-        p1.y *= (1 - alpha)
-      
-        var p2 = deBoor(k - 1, degree, i, x, knots, ctrlPoints)
-        p2.x *= alpha
-        p2.y *= alpha
-      
-        var p3 = new Phaser.Geom.Point(p1.x + p2.x, p1.y + p1.y)
-        return p3
-    }
+function deBoor(polygonPoints, knots, k, u)
+{
+	var matrix = []
+	var x = 0, y = 0, firstKnot = 0; //find I such that u within [u_I, u_I+1)
+	
+	//find the knots where u lies in between
+	for (var i = 0; i < knots.length; i++) //domain [U_k-1,U_n+1]
+	{
+		if (knots[i] <= u && u < knots[i + 1])
+			break;
+		else//not in that interval, u must be one ahead in knots
+			firstKnot++;
+	}
+	//first column contains the control points needed to locate c(u)
+	for (var i = 0; i < polygonPoints.length; i++) {
+    matrix[i] = []
+		matrix[i][0] = polygonPoints[i];
+  }
+
+
+	for (var j = 1; j < k; j++) //loop through from generation 1 to (k-1)
+	{
+		for (var i = firstKnot - (k - 1); i <= (firstKnot - j); i++)
+		{
+			x = (knots[i + k] - u) * matrix[i][j - 1].x / (knots[i + k] - knots[i + j]) +
+
+				(u - knots[i + j]) * matrix[i + 1][j - 1].x / (knots[i + k] - knots[i + j]);
+
+			y = (knots[i + k] - u) * matrix[i][j - 1].y / (knots[i + k] - knots[i + j]) +
+
+				(u - knots[i + j]) * matrix[i + 1][j - 1].y / (knots[i + k] - knots[i + j]);
+
+			matrix[i][j] = new Phaser.Geom.Point(x, y);
+		}
+	}
+	return matrix[firstKnot - (k - 1)][k - 1];
 }
 
 function applyDeBoor(polygonPoints) {
@@ -44,7 +62,7 @@ function applyDeBoor(polygonPoints) {
     var knots = [0, 0, 0, 1, 2, 2, 2];
 
     for (var k = 0; k < knots.length; k++) {
-      bSplinePoints.push(deBoor(k, 2, k-j, knots[k], knots, polygonPoints));
+      bSplinePoints.push(deBoor(polygonPoints, knots, k, 2));
     }
   }
   console.log(bSplinePoints)
