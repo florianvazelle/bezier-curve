@@ -16,14 +16,14 @@ function deBoor(k, x, knots, polygonPoints, degree) {
   return d[degree]
 }
 
-var test = false
+var test = true
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
   if (test) return []
   
   const degree = 3 // degree
-  const n = polygonPoints.length
-  const knots = [0, 0, 0, 1, 1, 2, 2, 2, 3] // length = n + degree
+  const n = polygonPoints.length - 1
+  const knots = [0, 0, 0, 1, 1, 2, 2, 2] // length = n + degree + 2
   const t = knots[degree + 1] 
   for (var j = 0; j < polygonPoints.length - 1; j++) {
     
