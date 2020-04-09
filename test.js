@@ -1,4 +1,3 @@
- // c => polygonPoints
 function deBoor(k, x, knots, polygonPoints, degree) {
   var d = []
   for (var j = 0; j < degree + 1; j++) {
