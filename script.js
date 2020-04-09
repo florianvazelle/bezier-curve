@@ -165,7 +165,7 @@ function update() {
 function displayLine(points) {
     for (var i = 0; i < points.length - 1; i++) {
         // Permet de dessiner les lignes entre les points
-        graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
+        graphics.strokeLineShape(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
     }  
 }
 
@@ -178,7 +178,7 @@ function displayCenter(data) {
 
 function displayDeCasteljau(points) {
     // Dessine les traits verts
-    graphics.lineStyle(2, 0x000000ff);
+    graphics.lineStyle(2, 0x0000ff);
     displayLine(points)
 }
 

@@ -2,7 +2,7 @@
 function deBoor(k, x, knots, polygonPoints, degree) {
   var d = []
   for (var j = 0; j < degree + 1; j++) {
-    d.push(new Phaser.Geom.Point(polygonPoints[Math.floor(j + k - degree)]))
+    d.push(polygonPoints[Math.floor(j + k - degree)])
   }
 
   for (var r = 1; r < degree + 1; r++) {
@@ -17,10 +17,15 @@ function deBoor(k, x, knots, polygonPoints, degree) {
 }
 
 function applyDeBoor(polygonPoints) {
+  var ctrlPoints = []
+  for (var i = 0; i < polygonPoints.length; i++) {
+    ctrlPoints.push(Phaser.Geom.Point.Clone(polygonPoints[i]))
+  }
+  
   var bSplinePoints = []
   
   const degree = 2 // degree
-  const n = polygonPoints.length - 1
+  const n = ctrlPoints.length - 1
   const knots = [0, 0, 0, 1, 2 ,2, 2] // length = n + degree + 2
 
   if (!(degree <= n)) { console.log('degree is not <= to n'); return [] }
@@ -28,10 +33,9 @@ function applyDeBoor(polygonPoints) {
   
   for (var i = degree; i < n + 1; i += 1) {
     let t = knots[i]
-    bSplinePoints.push(deBoor(i, t, knots, polygonPoints, degree));
+    bSplinePoints.push(deBoor(i, t, knots, ctrlPoints, degree));
   }
 
-  console.log(bSplinePoints)
   return bSplinePoints
 }
 
