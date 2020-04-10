@@ -35,7 +35,6 @@ function applyDeBoor(polygonPoints) {
   
   for (var i = degree; i < n + 1; i += 1) {
     let t = knots[Math.floor(i)]
-    for (var j = knots[Math.floor(i)]; j < knots[Math.floor(i) + 1]; j += 0.1)
     bSplinePoints.push(deBoor(i, t, knots, polygonPoints, degree));
   }
   
