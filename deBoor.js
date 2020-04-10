@@ -19,8 +19,8 @@ function deBoor(k, x, knots, polygonPoints, degree) {
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
 
-  const degree = 2                     // degree
   const n = polygonPoints.length - 1   //
+  const degree = 2                     // degree (inferieur à n)
   var knots = []                       // length = n + degree + 2
 
   for (var j = 0; j < n + degree + 2; j++) {

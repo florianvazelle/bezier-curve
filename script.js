@@ -11,6 +11,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+
 var translateSpeed = 2;
 var pas = 1; // précision
 var selectedPoint = { index: -1 };
@@ -19,7 +20,6 @@ var courbes = {
   data: [new Curve()]
 };
 var mouse = new Phaser.Geom.Point(0, 0);
-var points; // tableau 2D de Point, avec P[numero du point][niveau/stade]
 var graphics;
 
 // Methode executé une seul fois au début
@@ -35,89 +35,12 @@ function create() {
     courbes.data[courbes.index].polygonPoints[3] = new Phaser.Geom.Point(600, 400);
   
     // A chaque fois que l'on clique 
-    this.input.on('pointerdown', function (pointer) {
-      if (pointer.rightButtonDown()) {
-        // On ajoute un point
-        courbes.data[courbes.index].polygonPoints.push(new Phaser.Geom.Point(pointer.x, pointer.y));
-      } else if(pointer.leftButtonDown()){
-          // https://labs.phaser.io/view.html?src=src/geom\rectangle\contains%20point.js
-           for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
-             var point = courbes.data[courbes.index].polygonPoints[i]
-             var rect = new Phaser.Geom.Rectangle(point.x - 10, point.y - 10, 20, 20);
-              if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
-                  selectedPoint = { value: point, index: i };
-              }
-           }
-      } 
-    }, this);
-  
-    this.input.on('pointermove', function (pointer) {
-        if (selectedPoint.index != -1) {
-          selectedPoint.value.x = pointer.x;
-          selectedPoint.value.y = pointer.y;
-        }
-      mouse.x = pointer.x;
-      mouse.y = pointer.y;
-    }, this);
-  
-    this.input.on('pointerup', function (pointer) {
-      courbes.data[courbes.index].polygonPoints[selectedPoint.index] = selectedPoint.value;
-      selectedPoint.index = -1
-    }, this);
+    this.input.on('pointerdown', pointerdown, this);
+    this.input.on('pointermove', pointermove, this);
+    this.input.on('pointerup', pointerup, this);
     
     // A chaque fois que l'on presse une touche
-    this.input.keyboard.on('keydown', function (event) {
-      console.log(event.key)
-      if (event.key == "+") {
-        pas += 1;
-      }
-      
-      if (event.key == "-") {
-        pas = Math.max(pas - 1, 0);
-      }
-      
-      if (event.key == "i") {
-        movePointsUp(courbes.data[courbes.index].polygonPoints, translateSpeed);
-      }
-      
-      if (event.key == "k") {
-        movePointsDown(courbes.data[courbes.index].polygonPoints, translateSpeed);
-      }
-      
-      if (event.key == "j") {
-        movePointsRight(courbes.data[courbes.index].polygonPoints, translateSpeed);
-      }
-      
-      if (event.key == "l") {
-        movePointsLeft(courbes.data[courbes.index].polygonPoints, translateSpeed);
-      }
-      
-      if (event.key == "u") {
-        rotatePointsRight(courbes.data[courbes.index], translateSpeed);
-      }
-      
-      if (event.key == "ArrowLeft") {
-        courbes.index = Math.max(courbes.index - 1, 0);
-      }
-      
-      if (event.key == "ArrowRight") {
-        courbes.index = Math.min(courbes.index + 1, courbes.data.length);
-        if (courbes.data[courbes.index] == undefined) {
-          courbes.data[courbes.index] = new Curve()
-        }
-      }
-      
-      if (event.key == "Delete") {
-        if (courbes.index < courbes.data.length && courbes.data.length > 1) {
-          courbes.data.splice(courbes.index, 1);
-          courbes.index = Math.min(Math.max(courbes.index, 0), courbes.data.length - 1);
-        } else if(courbes.data.length == 1) {
-          courbes.data = [new Curve()]
-          courbes.index = 0
-        }
-      }
-      
-    }, this);
+    this.input.keyboard.on('keydown', keydown, this);
 }
 
 // Methode executé a chaque frame
@@ -157,16 +80,95 @@ function update() {
 }
 
 function displayLine(points, color) {
-    graphics.lineStyle(2, color);
-    for (var i = 0; i < points.length - 1; i++) {
-        // Permet de dessiner les lignes entre les points
-        graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
-    }  
+  graphics.lineStyle(2, color);
+  for (var i = 0; i < points.length - 1; i++) {
+      // Permet de dessiner les lignes entre les points
+      graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
+  }  
 }
 
 function displayCenter(data) {
-  graphics.fillStyle(0xfffff00); // Couleur des points
+  graphics.fillStyle(0xfffff00);
   var center = data.center();
   var circle = new Phaser.Geom.Circle(center.x, center.y, 5);
   graphics.fillCircleShape(circle);
+}
+
+function pointerdown (pointer) {
+  if (pointer.rightButtonDown()) {
+    // On ajoute un point
+    courbes.data[courbes.index].polygonPoints.push(new Phaser.Geom.Point(pointer.x, pointer.y));
+  } else if(pointer.leftButtonDown()) {
+    // On test tout les points pour savoir si le curseur en a selectionné un
+    for (var i = 0; i< courbes.data[courbes.index].polygonPoints.length ; i++) {
+      var point = courbes.data[courbes.index].polygonPoints[i]
+      
+      var rect = new Phaser.Geom.Rectangle(point.x - 10, point.y - 10, 20, 20);
+      if (Phaser.Geom.Rectangle.ContainsPoint(rect, pointer)) {
+        selectedPoint = { value: point, index: i };
+      }
+    }
+  } 
+}
+
+function pointermove (pointer) {
+  if (selectedPoint.index != -1) {
+    selectedPoint.value.x = pointer.x;
+    selectedPoint.value.y = pointer.y;
+  }
+  mouse.x = pointer.x;
+  mouse.y = pointer.y;
+}
+
+function pointerup (pointer) {
+  courbes.data[courbes.index].polygonPoints[selectedPoint.index] = selectedPoint.value;
+  selectedPoint.index = -1
+}
+
+function keydown (event) {
+  console.log(event.key)
+  if (event.key == "+") pas += 1;      
+  if (event.key == "-") pas = Math.max(pas - 1, 0);
+      
+  if (event.key == "i") {
+    movePointsUp(courbes.data[courbes.index].polygonPoints, translateSpeed);
+  }
+      
+  if (event.key == "k") {
+    movePointsDown(courbes.data[courbes.index].polygonPoints, translateSpeed);
+  }
+      
+  if (event.key == "j") {
+    movePointsRight(courbes.data[courbes.index].polygonPoints, translateSpeed);
+  }
+      
+  if (event.key == "l") {
+    movePointsLeft(courbes.data[courbes.index].polygonPoints, translateSpeed);
+  }
+      
+  if (event.key == "u") {
+    rotatePointsRight(courbes.data[courbes.index], translateSpeed);
+  }
+      
+  if (event.key == "ArrowLeft") {
+    courbes.index = Math.max(courbes.index - 1, 0);
+  }
+      
+  if (event.key == "ArrowRight") {
+    courbes.index = Math.min(courbes.index + 1, courbes.data.length);
+    if (courbes.data[courbes.index] == undefined) {
+      courbes.data[courbes.index] = new Curve()
+    }
+  }
+      
+  if (event.key == "Delete") {
+    if (courbes.index < courbes.data.length && courbes.data.length > 1) {
+      courbes.data.splice(courbes.index, 1);
+      courbes.index = Math.min(Math.max(courbes.index, 0), courbes.data.length - 1);
+    } else if(courbes.data.length == 1) {
+      courbes.data = [new Curve()]
+      courbes.index = 0
+    }
+  }
+      
 }
