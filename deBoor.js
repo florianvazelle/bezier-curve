@@ -10,11 +10,12 @@ function deBoor(k, x, knots, polygonPoints, degree) {
     for (var j = degree; j > r - 1; j--) {
       var alpha = (x - knots[Math.floor(j + k - degree)]) / (knots[Math.floor(j + 1 + k - r)] - knots[Math.floor(j + k - degree)])
       console.log('alpha: ' + alpha, 'j: ' + j, 'k: ' + k , 'degree: ' + degree)
-      var x = (1.0 - alpha) * d[j - 1].x + alpha * d[j].x
-      var y = (1.0 - alpha) * d[j - 1].y + alpha * d[j].y
-      console.log(x, y)
-      d[j].x = x
-      d[j].y = y
+      console.log(x + ' - ' + knots[Math.floor(j + k - degree)] + ' / ' + knots[Math.floor(j + 1 + k - r)] + ' - ' + knots[Math.floor(j + k - degree)])
+      var dx = (1.0 - alpha) * d[j - 1].x + alpha * d[j].x
+      var dy = (1.0 - alpha) * d[j - 1].y + alpha * d[j].y
+      console.log(dx, dy)
+      d[j].x = dx
+      d[j].y = dy
     }
   }
   
@@ -24,16 +25,16 @@ function deBoor(k, x, knots, polygonPoints, degree) {
 var test = true
 function applyDeBoor(polygonPoints) {
   var bSplinePoints = []
-  if (!test) return []
-  const degree = 3 // degree
+
+  const degree = 0 // degree
   const n = polygonPoints.length - 1
-  const knots = [0, 0, 0, 1, 1, 2 ,2, 2] // length = n + degree + 2
+  const knots = [0, 1, 2, 3, 4] // length = n + degree + 2
 
   if (!(degree <= n)) { console.log('degree is not <= to n'); return [] }
   if (!(knots.length == (n + degree + 2))) { console.log('wrong length of knots'); return [] }
   
-  for (var i = degree; i < n + 1; i += 1) {
-    let t = knots[i]
+  for (var i = degree; i < n + 1; i += 0.1) {
+    let t = knots[Math.floor(i)]
     bSplinePoints.push(deBoor(i, t, knots, polygonPoints, degree));
   }
   
