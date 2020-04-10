@@ -12,7 +12,7 @@ class Curve {
   
   center () {
     var center = new Phaser.Geom.Point(0, 0);
-    var pointsTab = courbes.data[courbes.index].polygonPoints;
+    var pointsTab = this.polygonPoints;
     for (var i = 0; i < pointsTab.length; i++) {
       center.x += pointsTab[i].x;
       center.y += pointsTab[i].y;

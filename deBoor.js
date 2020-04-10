@@ -1,3 +1,4 @@
+/* global Phaser */
 // évalue S(x)
 function deBoor(k, x, knots, polygonPoints, degree) {
   var d = []

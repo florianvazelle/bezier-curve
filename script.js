@@ -1,3 +1,4 @@
+/* global Phaser Curve */
 // Configuration pour Phaser
 var config = {
     width: 800, // Taille du canvas
@@ -60,18 +61,13 @@ function update() {
           graphics.strokeRectShape(rect);
       }
     }
-  
-    // Dessine les traits verts
-    for (var i = 0; i < courbes.data.length; i++) {
-        const { polygonPoints } = courbes.data[i] 
-        displayLine(polygonPoints, 0x00ff00);
-    }
     
     // On update la courbe courante (deCasteljauPoints et deBoor)
     courbes.data[currentIndex].update()
   
     for (var i = 0; i < courbes.data.length; i++) {
-        const { deCasteljauPoints, bSplinePoints } = courbes.data[i] 
+        const { polygonPoints, deCasteljauPoints, bSplinePoints } = courbes.data[i]
+        displayLine(polygonPoints, 0x00ff00);
         displayLine(deCasteljauPoints, 0x000000ff);
         displayLine(bSplinePoints, 0x0000ffff);
     }
@@ -84,7 +80,7 @@ function displayLine(points, color) {
   for (var i = 0; i < points.length - 1; i++) {
       // Permet de dessiner les lignes entre les points
       graphics.strokeLineShape(new Phaser.Geom.Line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y));
-  }  
+    }  
 }
 
 function displayCenter(data) {
