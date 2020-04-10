@@ -118,6 +118,8 @@ function create() {
       }
       
     }, this);
+  
+    courbes.data[courbes.index].bSplinePoints = applyDeBoor(courbes.data[courbes.index].polygonPoints);
 }
 
 // Methode executé a chaque frame
