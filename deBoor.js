@@ -5,17 +5,11 @@ function deBoor(k, x, knots, polygonPoints, degree) {
     d.push(Phaser.Geom.Point.Clone(polygonPoints[Math.floor(j + k - degree)]))
   }
 
-  console.log('d', d)
   for (var r = 1; r < degree + 1; r++) {
     for (var j = degree; j > r - 1; j--) {
       var alpha = (x - knots[Math.floor(j + k - degree)]) / (knots[Math.floor(j + 1 + k - r)] - knots[Math.floor(j + k - degree)])
-      console.log('alpha: ' + alpha, 'j: ' + j, 'k: ' + k , 'degree: ' + degree)
-      console.log(x + ' - ' + knots[Math.floor(j + k - degree)] + ' / ' + knots[Math.floor(j + 1 + k - r)] + ' - ' + knots[Math.floor(j + k - degree)])
-      var dx = (1.0 - alpha) * d[j - 1].x + alpha * d[j].x
-      var dy = (1.0 - alpha) * d[j - 1].y + alpha * d[j].y
-      console.log(dx, dy)
-      d[j].x = dx
-      d[j].y = dy
+      d[j].x = (1.0 - alpha) * d[j - 1].x + alpha * d[j].x
+      d[j].y = (1.0 - alpha) * d[j - 1].y + alpha * d[j].y
     }
   }
   
