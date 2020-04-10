@@ -146,7 +146,7 @@ function update() {
     
     // On update deCasteljauPoints de la courbe courante
     courbes.data[currentIndex].deCasteljauPoints = deCasteljau(courbes.data[currentIndex].polygonPoints);
-    courbes.data[currentIndex].bSplinePoints = applyDeBoor(courbes.data[currentIndex].polygonPoints);
+    //courbes.data[currentIndex].bSplinePoints = applyDeBoor(courbes.data[currentIndex].polygonPoints);
   
     for (var i = 0; i < courbes.data.length; i++) {
         const { deCasteljauPoints, bSplinePoints } = courbes.data[i] 
