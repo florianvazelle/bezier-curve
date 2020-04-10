@@ -1,8 +1,13 @@
 class Curve {
-  constructor() {
+  constructor() {  
     this.polygonPoints = []
     this.deCasteljauPoints = []
     this.bSplinePoints = []  
+  }
+  
+  update () {
+    this.deCasteljauPoints = deCasteljau(this.polygonPoints);
+    this.bSplinePoints = applyDeBoor(this.polygonPoints);
   }
   
   center () {
