@@ -31,11 +31,9 @@ function applyDeBoor(polygonPoints) {
   if (!(degree <= n)) { console.log('degree is not <= to n'); return [] }
   if (!(knots.length == (n + degree + 2))) { console.log('wrong length of knots'); return [] }
   
-  var i = degree
-  for (var j = 0; j < polygonPoints.length; j++) {
+  for (var i = degree; i < n + 1; i++) {
     var t = knots[i]
     bSplinePoints.push(deBoor(i, t, knots, polygonPoints, degree));
-    i+=0.5;
   }
   
   if (test) {
